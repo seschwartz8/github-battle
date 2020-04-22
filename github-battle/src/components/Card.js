@@ -1,45 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { ThemeConsumer } from '../contexts/theme'
+import ThemeContext from '../contexts/theme';
 
+function Card({ header, subheader, avatar, href, name, children }) {
+  // Hooks to consume the light/dark theme
+  const theme = useContext(ThemeContext);
 
-function Card ({ header, subheader, avatar, href, name, children }) {
-
-    return (
-        <ThemeConsumer>
-            {({ theme }) => (
-                <div className={`card bg-${theme}`}>
-                    <h4 className='header-lg center-text'>
-                        {header}
-                    </h4>
-                    <img   
-                        className='avatar'
-                        src={avatar}
-                        alt={`Avatar for ${name}`}
-                    />
-                    {subheader && (
-                        <h4 className='center-text'>
-                            {subheader}
-                        </h4>      
-                    )}                  
-                    <h2 className='center-text'>
-                        <a className='link' href={href}>
-                            {name}
-                        </a>
-                    </h2>
-                    {children} {/*render children -- whatever is between the opening and closing card tags*/}
-                </div>
-            )}
-        </ThemeConsumer>
-    )
+  return (
+    <div className={`card bg-${theme}`}>
+      <h4 className='header-lg center-text'>{header}</h4>
+      <img className='avatar' src={avatar} alt={`Avatar for ${name}`} />
+      {subheader && <h4 className='center-text'>{subheader}</h4>}
+      <h2 className='center-text'>
+        <a className='link' href={href}>
+          {name}
+        </a>
+      </h2>
+      {children}{' '}
+      {/*render children -- whatever is between the opening and closing card tags*/}
+    </div>
+  );
 }
 
 Card.propTypes = {
-    header: PropTypes.string.isRequired,
-    subheader: PropTypes.string,
-    avatar: PropTypes.string.isRequired,
-    href: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
-}
+  header: PropTypes.string.isRequired,
+  subheader: PropTypes.string,
+  avatar: PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+};
 
-export default Card
+export default Card;

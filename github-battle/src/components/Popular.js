@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { fetchPopularRepos } from '../utils/api';
 import {
@@ -134,7 +134,7 @@ const Popular = () => {
 
   const isLoading = () => {
     //returns if that repo hasn't cached yet and no errors -- aka it's loading
-    return !state[selectedLanguage] && error === null;
+    return !state[selectedLanguage] && state.error === null;
   };
 
   return (

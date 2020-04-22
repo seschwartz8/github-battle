@@ -1,57 +1,38 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const styles = { //keeping it all in one file for max reusability
-    content: {
-        fontSize: '35px',
-        position: 'absolute',
-        left: '0',
-        right: '0',
-        marginTop: '20px',
-        textAlign: 'center'
-    }
-}
+const styles = {
+  content: {
+    fontSize: '35px',
+    position: 'absolute',
+    left: '0',
+    right: '0',
+    marginTop: '20px',
+    textAlign: 'center',
+  },
+};
 
-class Loading extends Component {
-    constructor(props) {
-        super(props)
+const Loading = ({ text = 'Loading', speed = 300 }) => {
+  const [content, setContent] = useState(text);
 
-        this.state = {
-            content: props.text
-        }
-    }
+  useEffect(() => {
+    //every 300ms either add a dot or reset to 'Loading'
+    const intervalId = setInterval(() => {
+      content === text + '...'
+        ? setContent(text)
+        : setContent((content) => content + '.');
+    }, speed);
 
-    componentDidMount () { //every 300ms either add a dot or reset to 'Loading'
-        const { speed, text } = this.props
+    // Clear the interval timer when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, [text, speed]);
 
-        this.interval = window.setInterval(() => {
-            this.state.content === text + '...'
-            ? this.setState({ content: text })
-            : this.setState(({content}) => ({ content: content + '.' }))
-        }, speed)
-    }
-
-    componentWillUnmount () { //clear the timer when the component unmounts
-        window.clearInterval(this.interval)
-    }
-
-    render() {
-        return (
-            <p style={styles.content}>
-                {this.state.content}
-            </p>
-        )
-    }
-}
+  return <p style={styles.content}>{content}</p>;
+};
 
 Loading.propTypes = {
-    text: PropTypes.string.isRequired,
-    speed: PropTypes.number.isRequired
-}
+  text: PropTypes.string,
+  speed: PropTypes.number,
+};
 
-Loading.defaultProps = {
-    text: 'Loading',
-    speed: 300
-}
-
-export default Loading
+export default Loading;

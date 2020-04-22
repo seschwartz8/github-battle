@@ -18,10 +18,10 @@ const Loading = ({ text = 'Loading', speed = 300 }) => {
   useEffect(() => {
     //every 300ms either add a dot or reset to 'Loading'
     const intervalId = setInterval(() => {
-      content === text + '...'
-        ? setContent(text)
-        : setContent((content) => content + '.');
-    }, speed);
+      setContent((content) => {
+        return content === `${text}...` ? text : `${content}.`;
+      });
+    }, [speed]);
 
     // Clear the interval timer when the component is unmounted
     return () => clearInterval(intervalId);
